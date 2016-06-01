@@ -1,0 +1,15 @@
+#abcdefghijklmnopqrstuvwxyz
+#cdefghijklmnopqrstuvwxyzab
+
+#i hope you didnt translate it by hand.
+
+# python challenge 1
+
+import string
+
+def main():
+    code = input("what is the code?    ")
+    splitcode = sting.split(code,"")
+    eval(splitcode)
+
+main()

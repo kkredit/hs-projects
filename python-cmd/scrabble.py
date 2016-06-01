@@ -1,0 +1,92 @@
+# scrabble.py
+#   A program to propose possible words in scrabble situations
+# (mostly) Kevin Kredit
+
+from string import *#split,lower
+
+WORDLIST_FILENAME = "words.txt"
+####################################NOT MINE##################################
+def load_words():
+    """
+    Returns a list of valid words. Words are strings of lowercase letters.
+    
+    Depending on the size of the word list, this function may
+    take a while to finish.
+    """
+    #from string import *#split,lower
+    print ("Loading word list from file...")
+    inFile = open(WORDLIST_FILENAME, 'r')#, 0)
+    line = inFile.readline()
+    wordlist = line.split()#split(line)
+    print ("  ", len(wordlist), "words loaded.")
+    return wordlist
+
+dictionary = load_words()
+###############################MINE############################################
+alphabet = 'abcdefghijklmnopqrstuvwxyz'
+
+def search(word,start=0,finish=len(dictionary),x=1):
+    #print x,start,finish,finish-start,(finish+start)/2,\
+    #      dictionary[(finish+start)/2]
+    if finish-start < 5:
+        if word in dictionary[start:finish]: return True
+        else: return False
+    tword = dictionary[int((start+finish)/2)]
+    if len(tword) < len(word):
+        start = (start+finish)/2
+    elif len(tword) > len(word):
+        finish = (start+finish)/2
+    else:##if length is correct
+        unfound,n = True,0
+        while unfound:
+            if alphabet.index(tword[n]) < alphabet.index(word[n]):
+                start,unfound = int((start+finish)/2),False
+            elif alphabet.index(tword[n]) > alphabet.index(word[n]):
+                finish,unfound = int((start+finish)/2),False
+            elif n+1==len(word):
+                return True
+            n += 1
+    return search(word,start,finish,x+1)
+#######################################NOT MINE#########################
+def anagram(word):
+    if word == '':
+        return ['']
+    else:
+        ans = []
+        for w in anagram(word[1:]):
+            for pos in range(len(w)+1):
+                ans.append(w[:pos]+word[0]+w[pos:])
+        return ans
+#######################################MINE################################
+def combinations(word,wnum,numletters):#to allow not-all-letter-using words?????????
+    if wnum == numletters: return [word]
+    else:
+        ans = []
+        for pos in range(len(word)):
+            ans += combinations(word[:pos]+word[pos+1:],wnum-1,numletters)
+        return ans
+
+def main():
+    #from string import lower,split
+    letters = input('\nWhat are the scrambled letters: ').lower();
+    printed,numletters,more = [],len(letters),'yes'
+    while more[0].lower() == 'y' and numletters > 1:
+        found = 0
+        for word in combinations(letters,len(letters),numletters):
+            for w in anagram(word):
+                if (w not in printed) and search(w):##w in dictionary:#make my own search?
+                    if not found:
+                        print ('\nPossible',numletters,'letter words:\n')
+                    print (w)
+                    printed.append(w)
+                    found += 1
+        print ('\nTotal:',found)
+        if numletters == 2: break
+        numletters -= 1
+        more = input(str('\nWould you like '+str(numletters)+
+                             ' letter combinations? (y/n) '))
+    if not found:
+        print ('\nThose letters do not form any words.')
+    if input('\nAgain? ')[0].lower() == 'y':main()
+
+if __name__=='__main__':main()

@@ -1,0 +1,42 @@
+# smileyFace.py
+#   A program to draw smiley faces.
+# Kevin Kredit
+from graphics import *
+import random
+from random import randrange
+
+def main():
+    win = GraphWin("Smiley Face", 300, 300)
+    win.setCoords(0,0, 300,300)
+    for i in range(5):
+        x = randrange(1,300)
+        y = randrange(1,300)
+        center = Point(x,y)
+        size = randrange(10,50)
+        face = drawFace(center, size, win)
+        face.draw(win)
+
+def drawFace(center, size, win)
+    circle = Circle(Point(center), size)
+    circle.setFill("yellow")
+    circle.setOutline("black")
+    cy = center.getY()
+    cx = center.getX()
+    leftcentery = cy + (size/2)
+    leftcenterx = cx - (size/2)
+    rightcenterx = cx + (size/2)
+    rightcentery = cy + (sixe/2)
+    s4 = size / 4
+    lefteye = Circle(Point(leftcenterx,leftcentery), s4)
+    righteye = Cicle(Point(rightcenterx, rightcentery), s4)
+    mouth = Rectangle(Point(bottompoint,upperpoint))
+    lefteye.setFill("black")
+    righteye.setFill("black")
+    mouth.setFill("black")
+
+main()
+
+
+
+
+
